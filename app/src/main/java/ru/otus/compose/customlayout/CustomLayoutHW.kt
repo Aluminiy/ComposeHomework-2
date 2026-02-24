@@ -1,8 +1,8 @@
 package ru.otus.compose.customlayout
 
+import android.content.res.Resources
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
@@ -13,8 +13,11 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Constraints
+import androidx.compose.ui.unit.constrainHeight
+import androidx.compose.ui.unit.constrainWidth
 import androidx.compose.ui.unit.dp
 import kotlin.math.ceil
+
 
 /**
  * Task: Make custom grid layout
@@ -32,7 +35,12 @@ fun CustomLayoutHW(
     ) { measurables, constraints ->
         if (columns > 0 && measurables.isNotEmpty()) {
             val rows = ceil(measurables.count().toDouble() / columns).toInt()
-            val maxPlaceableWidth = constraints.maxWidth / columns
+            val width = if (constraints.hasBoundedWidth) {
+                constraints.maxWidth
+            } else {
+                Resources.getSystem().displayMetrics.widthPixels
+            }
+            val maxPlaceableWidth = width / columns
             val maxPlaceableHeight = constraints.maxHeight / rows
 
             val placeables = measurables.map { measurable ->
@@ -50,7 +58,9 @@ fun CustomLayoutHW(
             }
             val maxRowHeights = rowsInLists.map { row -> row.maxOfOrNull { it.height } ?: 0 }
 
-            layout(maxColumnWidths.sum(), maxRowHeights.sum()) {
+            val w = constraints.constrainWidth(maxColumnWidths.sum())
+            val h = constraints.constrainHeight(maxRowHeights.sum())
+            layout(w, h){
                 var yOffset = 0
                 rowsInLists.forEachIndexed { rowIndex, row ->
                     val rowHeight = maxRowHeights[rowIndex]
@@ -63,7 +73,7 @@ fun CustomLayoutHW(
                 }
             }
         } else {
-            layout(0, 0) {}
+            layout(constraints.minWidth, constraints.minHeight) {}
         }
     }
 }
@@ -82,52 +92,82 @@ fun CustomLayoutHWPreview() {
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(100.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(100.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(110.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(110.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(90.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(90.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(120.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(120.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(100.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(100.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(80.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(80.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(100.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(100.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(120.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(120.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(100.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(100.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
             Image(
                 painter = painterResource(id = R.drawable.catanddot),
                 contentDescription = null,
-                Modifier.size(90.dp).padding(4.dp).border(2.dp, color = Color.Black)
+                Modifier
+                    .size(90.dp)
+                    .padding(4.dp)
+                    .border(2.dp, color = Color.Black)
             )
         }
     }
